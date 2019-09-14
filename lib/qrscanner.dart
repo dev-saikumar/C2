@@ -7,16 +7,20 @@ void logError(String code, String message) =>
     print('Error: $code\nError Message: $message');
 
 class MyApp extends StatefulWidget {
-  final List<CameraDescription> cameras;
   MyApp({this.cameras});
+
+  final List<CameraDescription> cameras;
+
   @override
   _MyAppState createState() => new _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
-  QRReaderController controller;
-  AnimationController animationController;
   static AudioCache player = new AudioCache();
+
+  AnimationController animationController;
+  QRReaderController controller;
+  Animation<double> verticalPosition;
 
   @override
   void initState() {
@@ -42,46 +46,6 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
     // pick the first available camera
     onNewCameraSelected(widget.cameras[0]);
-  }
-
-  Animation<double> verticalPosition;
-
-  @override
-  Widget build(BuildContext context) {
-    return new Stack(
-      children: <Widget>[
-        new Container(
-          child: new Padding(
-            padding: const EdgeInsets.all(0.0),
-            child: new Center(
-              child: _cameraPreviewWidget(),
-            ),
-          ),
-        ),
-        Center(
-          child: Stack(
-            children: <Widget>[
-              SizedBox(
-                height: 250.0,
-                width: 250.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.red, width: 4.0)),
-                ),
-              ),
-              Positioned(
-                top: verticalPosition.value,
-                child: Container(
-                  width: 250.0,
-                  height: 2.0,
-                  color: Colors.red,
-                ),
-              )
-            ],
-          ),
-        ),
-      ],
-    );
   }
 
   /// Display the preview from the camera (or a message if the preview is not available).
@@ -209,4 +173,42 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   }
 
   void showInSnackBar(String message) {}
+
+  @override
+  Widget build(BuildContext context) {
+    return new Stack(
+      children: <Widget>[
+        new Container(
+          child: new Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: new Center(
+              child: _cameraPreviewWidget(),
+            ),
+          ),
+        ),
+        Center(
+          child: Stack(
+            children: <Widget>[
+              SizedBox(
+                height: 250.0,
+                width: 250.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.red, width: 4.0)),
+                ),
+              ),
+              Positioned(
+                top: verticalPosition.value,
+                child: Container(
+                  width: 250.0,
+                  height: 2.0,
+                  color: Colors.red,
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
